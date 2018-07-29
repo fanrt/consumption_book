@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>${SessionSysPortal.appTitle}</title>
+    #parse("./common/pageCss.vm")
+</head>
+<body class="gray-bg">
+<div class="wrapper-content full-height">
+    <div class="ibox float-e-margins m-b-none">
+        <div class="ibox-content m-b-xs p-b-n">
+            <div class="row">
+                <form id="queryForm" method="get" class="form-horizontal">
+                    <div class="col-sm-3 m-b-sm m-l-n">
+                        <label class="control-label p-r-n p-l-n col-sm-4">消费时间</label>
+                        <div class="col-sm-8 p-r-n">
+                            #formTextInput("" "" " id='queryDateRange' class='form-control layer-date dateG1'")
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--list start-->
+    <div class="white-bg">
+        <div class="table-responsive">
+            <!-- 列表表格 工具栏-->
+            <div class="fixed-table-toolbar">
+                <!-- 左边按钮 -->
+                <div class="bars pull-left hidden-xs">
+                    <button id="btn_add" type="button" class="btn btn-sm btn-primary">
+                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i> <span>新增</span>
+                    </button>
+                </div>
+
+                <!-- 右边按钮 -->
+                <div class="bars pull-right hidden-xs">
+                    <button type="button" id="btn_query" class="btn btn-sm btn-primary">
+                        <i class="fa fa-search"></i> <span>查 询</span>
+                    </button>
+                    <button type="button" id="btn_clean" class="btn btn-sm btn-info">
+                        <i class="fa fa-recycle"></i> <span>清 空</span>
+                    </button>
+                </div>
+            </div>
+            <!-- 列表表格 工具栏 结束-->
+
+            <!-- table数据列表 -->
+            <div class="example">
+                <table id="tableListData" class="table table-hover table-striped" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 全局js -->
+    #parse("./common/pageJs.vm")
+    #parse("./common/common.js.vm")
+<!-- 页面js -->
+    #parse("./consumption/consumptionList.js.vm")
+</body>
+</html>
+

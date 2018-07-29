@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>日常监管</title>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    #parse("./common/pageCss.vm")
+    #parse("./common/pageJs.vm")
+    <!-- 页面js -->
+    #parse("./common/common.js.vm")
+    <script src="../resource/soDiaoEditor/dialogs/jscolor-2.0.4/jscolor.min.js"></script>
+    <style>
+        .text-only {
+            display: none;
+        }
+        .date-only {
+            display: none;
+        }
+        .btn {
+            margin-right: 2px;
+        }
+        .oprate {
+            display: none;
+        }
+        .input-prepend {
+            height: 34px;
+        }
+        .input-group.col-sm-5 {
+            display: inline-table;
+        }
+        .input-prepend:hover > .oprate{
+            float: none;
+            top: -15px;
+            display: inline;    //鼠标移入后，按钮内容为可见
+        }
+    </style>
+</head>
+
+<body class="white-bg">
+
+    <form id="controlModelForm" class="form-horizontal full-height-scroll p-b-62">
+        <!-- 表单 开始 -->
+        <div class="table-content">
+            <div class="text-box"><h5 id="ItemTlpTitle"></h5><span class="red">红字为必填</span></div>
+            <div class="form-group">
+                #formHiddenInput("controlModelId" "$!{controlModel.controlModelId}" "id='controlModelId'")
+                <label class="col-sm-2 control-label text-right p-r-none p-l-none red">消费日期</label>
+                <div class="col-sm-3">
+                    <input type="text" id="licenceToDate" name="licenceToDate" class="form-control layer-date" onclick="laydate({istime: false, format: 'YYYY-MM-DD'})" value="#displayOnlyDate($!{examineEntpObject.licenceToDate})" />
+                </div>
+            </div>
+            <div class="form-group radio-only">
+                <label class="col-sm-2 control-label text-right p-r-none p-l-none red">消费物品<i class="fa fa-plus" style="color: green; padding-left: 5px;" onclick="addOption()"></i></label>
+                <div class="col-sm-8" id="options"></div>
+            </div>
+
+        </div>
+        <!-- 表单 结束 -->
+    </form>
+    <div class="tool-bottom-fixed">
+        <button type="button" class="btn btn-success" onclick="saveProgrammeTlp()"><i class="fa fa-save"></i> 保存</button>
+    </div>
+<script>
+    var aipCaseFileds = JSON.parse('$!aipCaseFiledsStr');
+    var bindingData = #if(!${controlModel.bindingData}) [] #else JSON.parse('$!{controlModel.bindingData}') #end;
+    $(function() {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+        for (var i = 0; i < bindingData.length; i++) {
+            addOption(bindingData[i])
+        }
+    });
+
+    function addOption(data){
+        if (!data) {
+            data = {
+                VALUE: '',
+                TEXT: ''
+            };
+        }
+        var html = [];
+        html.push('<div class="input-prepend">');
+        html.push('<div class="input-group col-sm-5">');
+        html.push('<div class="input-group-addon">物品名称</div>');
+        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="物品名称" value="' + data.VALUE + '">');
+        html.push('<div class="input-group-addon">价格</div>');
+        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="价格" value="' + data.TEXT + '">');
+        html.push('</div>');
+        html.push('<div class="oprate col-sm-3">');
+        html.push('<button type="button" class="btn btn-default" onclick="upOption(this)"><i class="fa fa-arrow-up"></i></button>');
+        html.push('<button type="button" class="btn btn-default" onclick="downOption(this)"><i class="fa fa-arrow-down"></i></button>');
+        html.push('<button type="button" class="btn btn-default" onclick="deleteOption(this)"><i class="fa fa-trash"></i></button>');
+        html.push('</div>');
+        html.push('</div>');
+        $("#options").append(html.join(''));
+    }
+
+    function upOption(dom) {
+        $(dom).parent().parent().prev().before($(dom).parent().parent()[0]);
+        // $(dom).parent().parent().remove();
+    }
+
+    function downOption(dom) {
+        $(dom).parent().parent().next().after($(dom).parent().parent()[0]);
+    }
+
+    function deleteOption(dom) {
+        console.log(dom)
+        console.log($(dom).parent().parent().remove())
+    }
+
+    // 提交表单
+    function saveProgrammeTlp() {
+        if($("#controlModelForm").valid()) {
+            var controlModelParams = common.serializeObject($('#controlModelForm'));
+            if (controlModelParams.modelType == '4' || controlModelParams.modelType == '5' || controlModelParams.modelType == '6') {
+                var options = [];
+                $("#options").children("div").each(function(index){
+                    var option = {
+                        VALUE: $(this).children('div:first-child').children('input').eq(0).val(),
+                        TEXT: $(this).children('div:first-child').children('input').eq(1).val(),
+                    };
+                    if (controlModelParams.modelType == '4') {
+                        option.SELECTED = 0;
+                    }
+                    if (controlModelParams.modelType == '5') {
+                        option.CHECKED = 0;
+                    }
+                    if (controlModelParams.modelType == '6') {
+                        option.CHECKED = 0;
+                    }
+                    options.push(option);
+                })
+                controlModelParams.bindingData = JSON.stringify(options);
+            }
+            $.post("../controlmodel/controleModelSave.jo", controlModelParams,  function (result) {
+                if (result.code == "0") {
+                    common.alertCall("保存成功!", 1, function (){
+                        // 刷新父页面
+                        var $btnQuery = $('#btn_query', window.parent.document);
+                        if($btnQuery.length > 0 ) $btnQuery.click();
+
+                        // 关闭窗口
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    });
+                } else {
+                    common.alert(result.msg,0);
+                }
+            }, "json").error(function (e){jqueryPostError(e)});
+        }
+    }
+</script>
+</body>
+
+</html>

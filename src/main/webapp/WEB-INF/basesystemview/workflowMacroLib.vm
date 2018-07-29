@@ -1,0 +1,99 @@
+#macro(sheetHead $_sheetInfo,$_curr_tab)
+<div class=dymenu>
+#foreach($_sheetItem in $_sheetInfo)
+    <a id="sheetTab_${_sheetItem.id}" #if($_sheetItem.id == $_curr_tab)class="index"#end href="${_sheetItem.url}"><span>${_sheetItem.name}</span></a>
+#end
+    <DIV style="POSITION: relative; FLOAT: right; TOP: 3px">
+#foreach($_sheetItem in $_sheetInfo)
+    #if ($_sheetItem.id==$_curr_tab)
+        #foreach ($_btn in ${_sheetItem.buttons})
+    <INPUT class=input_style onclick="${_btn.onclick}" value="${_btn.name}" type=button>
+        #end
+    #end
+#end
+    &nbsp; </div>
+</div>
+#end
+
+#*
+ * 产生流程处理各环节使用的 TAB SHEET
+ *#
+#macro(showFlowSheets $sense $sheetId $taskId $businessKey $instId $buttons $feedbackFlag)
+<div class=dymenu>
+    <a id="sheetTab_flowNotes" #if($sheetId=="flowNotes")class="index"#end href="../complain/notesShow.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>办理笺</span></a>
+    #if($sense == "accept")
+    <a id="sheetTab_complaint" #if($sheetId=="complaint")class="index"#end href="../complain/complaintEdit.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>投诉内容</span></a>
+    <a id="sheetTab_accept" #if($sheetId=="accept")class="index"#end href="../workflow/taskReady.do?taskId=$!{taskId}"><span>受  理</span></a>
+    #elseif($sense == "execute")
+    <a id="sheetTab_complaint" #if($sheetId=="complaint")class="index"#end href="../complain/complaintEdit.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>投诉内容</span></a>
+    <a id="sheetTab_execute" #if($sheetId=="execute")class="index"#end href="../workflow/taskReady.do?taskId=$!{taskId}"><span>部门处理</span></a>
+    #elseif($sense == "audit")
+    <a id="sheetTab_complaint" #if($sheetId=="complaint")class="index"#end href="../complain/complaintEdit.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>投诉内容</span></a>
+    <a id="sheetTab_audit" #if($sheetId=="audit")class="index"#end href="../workflow/taskReady.do?taskId=$!{taskId}"><span>领导审批</span></a>
+    #elseif($sense == "feedback")
+    <a id="sheetTab_complaint" #if($sheetId=="complaint")class="index"#end href="../complain/complaintEdit.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>投诉内容</span></a>
+    <a id="sheetTab_feedback" #if($sheetId=="feedback")class="index"#end href="../workflow/taskReady.do?taskId=$!{taskId}"><span>反馈处理</span></a>
+    #else
+    <a id="sheetTab_complaint" #if($sheetId=="complaint")class="index"#end href="../complain/complaintShow.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>投诉内容</span></a>
+    #end
+    #if(${complaintLaw.caseNum})
+    <a id="sheetTab_law" #if($sheetId=="law")class="index"#end href="../complain/complaintLawEdit.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&caseFlag=$!{caseFlag}"><span>立  案</span></a>
+    #end
+    #if($feedbackFlag == "1")
+    <a id="sheetTab_feedbackShow" #if($sheetId=="feedbackShow")class="index"#end href="../complain/feedbackShow.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>反馈记录</span></a>
+    #end
+    #if($rescueId)
+    <a id="sheetTab_rescue" #if($sheetId=="rescue")class="index"#end href="../complain/rescueShow.do?rescueId=${rescueId}&sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>应急响应</span></a>
+    #end
+    <a id="sheetTab_flowHisNode" #if($sheetId=="flowHisNode")class="index"#end href="../complain/flowHisNodeShow.do?sense=$!{sense}&businessKey=$!{businessKey}&instId=$!{instId}&taskId=$!{taskId}&feedbackFlag=$!{feedbackFlag}"><span>流转记录</span></a>
+    <DIV style="POSITION: relative; FLOAT: right; TOP: 3px">
+        #foreach ($_btn in $!{buttons})
+        <INPUT class=input_style onclick="${_btn.onclick}" value="${_btn.name}" type=button>
+        #end
+    &nbsp; </div>
+</div>
+#end
+
+#macro(buildDymenu $menus $buttons)
+<script type="text/javascript" >
+  function switchSheet(el) {
+	  var menuid = el.getAttribute('menuid');
+	  var dymenuEl = el.parentNode;
+      for (var i = 0; i < dymenuEl.childNodes.length; i++) {
+    	  var menuEl = dymenuEl.childNodes[i];
+    	  if (menuEl.tagName == 'A') {
+    		  var id = menuEl.getAttribute('menuid');
+    		  if (id === menuid) {
+    			  menuEl.className = 'index';
+    			  document.getElementById('sheet-content-' + id).style.display = 'block';
+              } else {
+    			  menuEl.className = '';
+    			  document.getElementById('sheet-content-' + id).style.display = 'none';
+    		  }
+    	  } else if (menuEl.tagName == 'DIV' && menuEl.className == 'dymenu-buttons') {
+    		  for (var j = 0; j < menuEl.childNodes.length; j++) {
+    			  var btnEl = menuEl.childNodes[j];
+    			  if (btnEl.tagName == 'BUTTON') {
+    				  var forMenus = btnEl.getAttribute('for');
+    				  if (forMenus && forMenus !== menuid) {
+                          btnEl.style.display = 'none';
+    				  } else {
+    					  btnEl.style.display = '';
+    				  }
+    			  }
+    		  }
+    	  }
+      }
+  }
+</script>
+<div class="dymenu">
+#foreach($menu in $menus)
+<a menuid="${menu.id}" href="#" onclick="switchSheet(this)" #if(${menu.index})class="index"#end><span>${menu.title}</span></a>
+#end
+<div class="dymenu-buttons">
+#foreach($btn in $buttons)
+<button class="i-button" onclick="$!{btn.onclick}" for="$!{btn.for}"><img src="../app/right/images/${btn.picture}"> ${btn.title}</button>
+#end
+</div>
+</div>
+#end

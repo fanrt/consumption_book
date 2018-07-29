@@ -1,0 +1,13 @@
+<!-- 全局js -->
+<script src="../resource/js/jquery.min.js"></script>
+<script src="../resource/js/bootstrap.min.js"></script>
+<script src="../resource/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="../resource/js/plugins/iCheck/icheck.min.js"></script>
+<script src="../resource/js/plugins/layer/layer.min.js"></script>
+<script src="../resource/js/plugins/layer/laydate/laydate.js"></script><!--layer-->
+<script src="../resource/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="../resource/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript">var contextPath = "$!contextPath";</script>
+<!-- form检验 -->
+<script src="../resource/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="../resource/js/plugins/validate/messages_zh.min.js"></script>

@@ -1,0 +1,107 @@
+<script>
+    $(document).ready(function () {
+        // 初始化日期查询控件
+        laydate.render({elem: '#queryDateRange', range: true});
+
+        // 初始化查询表单
+        function initForm() {
+            var queryParams = common.serializeObject($('#queryForm'));
+            var dateRange = $('#queryDateRange').val();
+            if (dateRange == "" || dateRange == undefined) {
+                return queryParams;
+            }
+            var arrayDate = dateRange.split(" - ");
+            queryParams.beginDate = ((arrayDate[0] != "" && arrayDate[0] != undefined) ? arrayDate[0] : "");
+            queryParams.endDate = ((arrayDate[1] != "" && arrayDate[1] != undefined) ? arrayDate[1] : "");
+            return queryParams;
+        }
+
+        // 新增按钮
+        $('#btn_add').click(function (){
+            common.open('../consumption/consumptionEdit.do', "新增", {});
+        });
+
+        // 查询按钮
+        $('#btn_query').click(function (){
+            var queryParams = initForm();
+            var options = {url: '../consumption/controleModelPageData.jo', silent: false, query: queryParams};
+            $('#tableListData').bootstrapTable('refresh', options);
+        });
+
+        // 清空按钮
+        $('#btn_clean').click(function (){
+            var $formObj = $("#queryForm");
+            $formObj.find("input[type=text]").val("");
+            $formObj.find("select").val('');
+            $formObj.find("select").trigger("chosen:updated");
+        });
+
+        //查询患者检查登记表表列表
+        $('#tableListData').bootstrapTable(
+            $.extend(baseTable, {
+            url : "../consumption/consumptionPageData.jo",
+            queryParams : function (params){
+            var requestParams = initForm();
+            requestParams.pageSize = params.pageSize;
+            requestParams.pageNumber = params.pageNumber;
+            return requestParams;
+        },
+            columns : [
+            //{checkbox : true} ,
+        {
+            field : 'createTime',
+            title : '消费时间',
+            formatter : datetimeFormatter
+        }, {
+            field : 'price',
+            title : '消费价格'
+        }, {
+            field : 'operate',
+            title : '操作',
+            width : '120px',
+            events : operateEvents,
+            formatter : operateFormatter
+        }],
+            onDblClickRow : function (row, element){
+            showExamRegister(row.caseApplyId);
+        },
+            onLoadSuccess : function(){
+            var height = ($('#tableListData').parents("body").height() - $('.fixed-table-toolbar').height()  - $('.ibox').height() - 25);
+            $('#tableListData').bootstrapTable('resetView', {height: height});
+        }
+        })
+        );
+    });
+
+    // 时间戳日期formatter
+    function datetimeFormatter(value, row, index) {
+        if (value) {
+            var now = new Date(parseInt(value));
+            return now.format("yyyy-MM-dd");
+        }
+        return value;
+    }
+
+    //操作栏操作按钮
+    function operateFormatter(value, row, index) {
+        var btnArray=[];
+        btnArray.push('<a id="btn_show" href="javascript:void(0)" title="详情"><i class="fa fa-eye"></i></a>');
+        btnArray.push('<a id="btn_edit" href="javascript:void(0)" title="修改"><i class="fa fa-pencil-square-o edit"></i></a>');
+        btnArray.push('<a id="btn_delete" href="javascript:void(0)" title="删除"><i class="fa fa-minus-circle del"></i></a>');
+        return btnArray.join("");
+    }
+
+    //操作栏操作按钮的事件
+    window.operateEvents = {
+        "click #btn_edit" : function (e, value, row, index) {
+            var url = '../consumptionEdit/consumptionEdit.do?controlModelId=' + row.controlModelId;
+            var title = row.modelName;
+            common.open(url, title, {area: ['98.6%', '97%']});
+        },
+        "click #btn_show" : function (e, value, row, index) {
+            var url = '../consumptionEdit/consumptionEdit.do?controlModelId=' + row.controlModelId;
+            var title = row.modelName;
+            common.open(url, title, {area: ['98.6%', '97%']});
+        }
+    };
+</script>
