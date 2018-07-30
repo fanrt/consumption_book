@@ -1,6 +1,7 @@
 package cn.fanrt.consumption.controller;
 
 import cn.fanrt.consumption.repository.ConsumptionEverydayRepository;
+import cn.fanrt.consumption.service.ConsumptionEverydayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class ConsumptionController {
 
     @Autowired
-    private ConsumptionEverydayRepository consumptionEverydayRepository;
+    private ConsumptionEverydayService consumptionEverydayService;
 
     /**
      * 进入每日消费列表页面
@@ -40,8 +41,11 @@ public class ConsumptionController {
      */
     @RequestMapping("/consumptionPageData.jo")
     @ResponseBody
-    public Map<String, Object> caseApplyListData() {
+    public Map<String, Object> caseApplyListData(Integer pageNumber, Integer pageSize) {
         Map<String, Object> result = new HashMap<String, Object>();
+        Page page = this.consumptionEverydayService.findConsumptionEverydayPage(pageNumber, pageSize);
+        result.put("rows", page.getContent());
+        result.put("total", page.getTotalElements());
         return result;
     }
 
