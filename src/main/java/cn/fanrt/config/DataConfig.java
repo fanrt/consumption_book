@@ -35,7 +35,8 @@ public class DataConfig {
     public EntityManagerFactory entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setDatabase(Database.ORACLE);
+//        vendorAdapter.setDatabase(Database.ORACLE);
+        vendorAdapter.setShowSql(true);
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("cn.fanrt");

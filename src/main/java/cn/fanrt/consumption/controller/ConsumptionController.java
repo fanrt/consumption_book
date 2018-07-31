@@ -1,5 +1,6 @@
 package cn.fanrt.consumption.controller;
 
+import cn.fanrt.consumption.domain.ConsumptionEveryday;
 import cn.fanrt.consumption.repository.ConsumptionEverydayRepository;
 import cn.fanrt.consumption.service.ConsumptionEverydayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,9 @@ public class ConsumptionController {
     public Map<String, Object> caseApplyListData(Integer pageNumber, Integer pageSize) {
         Map<String, Object> result = new HashMap<String, Object>();
         Page page = this.consumptionEverydayService.findConsumptionEverydayPage(pageNumber, pageSize);
+//        List<ConsumptionEveryday> consumptionEverydayList = this.consumptionEverydayService.findConsumptionEverydayList(pageNumber, pageSize);
         result.put("rows", page.getContent());
-        result.put("total", page.getTotalElements());
+        result.put("total", 1);
         return result;
     }
 

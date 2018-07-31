@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @Author: fanrt
@@ -24,7 +25,11 @@ public class ConsumptionEverydayService {
     private ConsumptionEverydayRepository consumptionEverydayRepository;
 
     public Page<ConsumptionEveryday> findConsumptionEverydayPage(Integer page, Integer size) {
-        Pageable pageable = new PageRequest(page, size, Sort.Direction.DESC, "consumptionDate");
+        Pageable pageable = new PageRequest(page - 1, size);
         return this.consumptionEverydayRepository.findAll(pageable);
+    }
+
+    public List<ConsumptionEveryday> findConsumptionEverydayList(Integer page, Integer size) {
+        return this.consumptionEverydayRepository.findAll();
     }
 }
