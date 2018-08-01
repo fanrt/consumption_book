@@ -89,17 +89,19 @@
     function addOption(data){
         if (!data) {
             data = {
-                VALUE: '',
-                TEXT: ''
+                goodsId: '',
+                goodsName: '',
+                price: ''
             };
         }
         var html = [];
         html.push('<div class="input-prepend">');
         html.push('<div class="input-group col-sm-8">');
+        html.push('<input type="hidden" value="' + data.goodsId + '">');
         html.push('<div class="input-group-addon">物品名称</div>');
-        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="物品名称" value="' + data.VALUE + '">');
+        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="物品名称" value="' + data.goodsName + '">');
         html.push('<div class="input-group-addon">价格</div>');
-        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="价格" value="' + data.TEXT + '">');
+        html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="价格" value="' + data.price + '">');
         html.push('<div class="input-group-addon">类型</div>');
         html.push('<select class="form-control" style="width: 80px;">');
         html.push('<option value=""></option><option value="1">衣</option><option value="2">食</option><option value="3">住</option><option value="4">行</option><option value="5">其他</option>');
@@ -134,14 +136,18 @@
             var consumptionEverydayParams = common.serializeObject($('#consumptionEverydayForm'));
             var options = [];
             $("#options").children("div").each(function(index){
-                var option = {
-                    goodsName: $(this).children('div:first-child').children('input').eq(0).val(),
-                    price: $(this).children('div:first-child').children('input').eq(1).val(),
-                    goodsType: $(this).children('div:first-child').children('select').eq(0).val(),
-                };
-                options.push(option);
+                var parse = 'consumptionGoodsEditInfoList[' + index + ']';
+                consumptionEverydayParams[parse + '.goodsName'] = $(this).children('div:first-child').children('input').eq(0).val();
+                consumptionEverydayParams[parse + '.price'] = $(this).children('div:first-child').children('input').eq(1).val();
+                consumptionEverydayParams[parse + '.goodsType'] = $(this).children('div:first-child').children('select').eq(0).val();
+                // var option = {
+                //     goodsName: $(this).children('div:first-child').children('input').eq(0).val(),
+                //     price: $(this).children('div:first-child').children('input').eq(1).val(),
+                //     goodsType: $(this).children('div:first-child').children('select').eq(0).val(),
+                // };
+                // options.push(option);
             })
-            consumptionEverydayParams.consumptionGoodsEditInfoList = options;
+            // consumptionEverydayParams.consumptionGoodsEditInfoList = options;
             console.log(consumptionEverydayParams);
             $.post("../consumption/consumptionSave.jo", consumptionEverydayParams,  function (result) {
                 if (result.code == "0") {
