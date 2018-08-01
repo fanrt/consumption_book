@@ -30,6 +30,10 @@ public class ConsumptionEveryday {
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
+    /** 备注 */
+    @Column(name = "REMARK", length = 100)
+    private String remark;
+
     public Long getConsumptionId() {
         return consumptionId;
     }
@@ -60,5 +64,13 @@ public class ConsumptionEveryday {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

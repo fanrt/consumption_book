@@ -15,7 +15,7 @@ public class ConsumptionEverydayEditInfo {
     private Long consumptionId;
 
     /** 消费时间 */
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy年MM月dd日")
     private Date consumptionDate;
 
     /** 价钱 */
@@ -23,6 +23,9 @@ public class ConsumptionEverydayEditInfo {
 
     /** 创建时间 */
     private Date createTime;
+
+    /** 备注 */
+    private String remark;
 
     private List<ConsumptionGoodsEditInfo> consumptionGoodsEditInfoList;
 
@@ -64,5 +67,13 @@ public class ConsumptionEverydayEditInfo {
 
     public void setConsumptionGoodsEditInfoList(List<ConsumptionGoodsEditInfo> consumptionGoodsEditInfoList) {
         this.consumptionGoodsEditInfoList = consumptionGoodsEditInfoList;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

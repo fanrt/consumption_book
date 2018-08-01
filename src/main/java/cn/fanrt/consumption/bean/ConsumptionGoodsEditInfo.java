@@ -23,6 +23,9 @@ public class ConsumptionGoodsEditInfo {
     /** 创建时间 */
     private Date createTime;
 
+    /** 商品类型 */
+    private String goodsType;
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -61,5 +64,13 @@ public class ConsumptionGoodsEditInfo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }

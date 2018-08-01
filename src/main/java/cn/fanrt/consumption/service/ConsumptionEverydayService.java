@@ -48,6 +48,7 @@ public class ConsumptionEverydayService {
             consumptionEveryday.setCreateTime(new Date());
         }
         consumptionEveryday.setConsumptionDate(editInfo.getConsumptionDate());
+        consumptionEveryday.setRemark(editInfo.getRemark());
         Double price = 0.0;
         for (ConsumptionGoodsEditInfo info: editInfo.getConsumptionGoodsEditInfoList()) {
             price += info.getPrice();

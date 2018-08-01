@@ -49,7 +49,7 @@
                 #formHiddenInput("consumptionId" "$!{consumptionEveryday.consumptionId}" "id='consumptionId'")
                 <label class="col-sm-2 control-label text-right p-r-none p-l-none red">消费日期</label>
                 <div class="col-sm-8">
-                    <input type="text" id="consumptionDate" name="consumptionDate" class="form-control layer-date" value="#displayOnlyDate($!{consumptionEveryday.consumptionDate})" readonly/>
+                    <input type="text" id="consumptionDate" name="consumptionDate" class="form-control layer-date" value="$!{consumptionEveryday.consumptionDate}" readonly/>
                 </div>
             </div>
             <div class="form-group radio-only">
@@ -83,8 +83,18 @@
     });
 
     laydate.render({
-        elem: '#consumptionDate' //指定元素
+        elem: '#consumptionDate', //指定元素
+        format: 'yyyy年MM月dd日',
+        value: #if ($!{consumptionEveryday.consumptionDate}) new Date('$!{consumptionEveryday.consumptionDate}') #else new Date() #end
     });
+
+    var googdTypes = {
+        "1": "衣",
+        "2": "食",
+        "3": "住",
+        "4": "行",
+        "5": "其他"
+    }
 
     function addOption(data){
         if (!data) {
@@ -104,7 +114,15 @@
         html.push('<input type="text" class="form-control" id="exampleInputAmount" placeholder="价格" value="' + data.price + '">');
         html.push('<div class="input-group-addon">类型</div>');
         html.push('<select class="form-control" style="width: 80px;">');
-        html.push('<option value=""></option><option value="1">衣</option><option value="2">食</option><option value="3">住</option><option value="4">行</option><option value="5">其他</option>');
+        html.push('<option value=""></option>');
+        for (var googdType in googdTypes) {
+            html.push('<option value="' + googdType + '"');
+            if (googdType == data.goodsType) {
+                html.push('selected="selected"');
+            }
+            html.push('>' + googdTypes[googdType] + '</option>');
+        }
+        // html.push('<option value=""></option><option value="1">衣</option><option value="2">食</option><option value="3">住</option><option value="4">行</option><option value="5">其他</option>');
         html.push('</select>');
         html.push('</div>');
         html.push('<div class="oprate col-sm-3">');
@@ -137,8 +155,9 @@
             var options = [];
             $("#options").children("div").each(function(index){
                 var parse = 'consumptionGoodsEditInfoList[' + index + ']';
-                consumptionEverydayParams[parse + '.goodsName'] = $(this).children('div:first-child').children('input').eq(0).val();
-                consumptionEverydayParams[parse + '.price'] = $(this).children('div:first-child').children('input').eq(1).val();
+                consumptionEverydayParams[parse + '.goodsId'] = $(this).children('div:first-child').children('input').eq(0).val();
+                consumptionEverydayParams[parse + '.goodsName'] = $(this).children('div:first-child').children('input').eq(1).val();
+                consumptionEverydayParams[parse + '.price'] = $(this).children('div:first-child').children('input').eq(2).val();
                 consumptionEverydayParams[parse + '.goodsType'] = $(this).children('div:first-child').children('select').eq(0).val();
                 // var option = {
                 //     goodsName: $(this).children('div:first-child').children('input').eq(0).val(),

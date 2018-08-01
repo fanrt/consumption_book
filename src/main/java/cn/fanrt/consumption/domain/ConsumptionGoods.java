@@ -14,7 +14,7 @@ import java.util.Date;
 public class ConsumptionGoods {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CONSUMPTION_EVERYDAY_ID")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CONSUMPTION_GOODS_ID")
     @Column(name="GOODS_ID", unique=true, nullable=false, precision=18)
     private Long goodsId;
 
@@ -33,6 +33,10 @@ public class ConsumptionGoods {
     /** 创建时间 */
     @Column(name = "CREATE_TIME")
     private Date createTime;
+
+    /** 商品类型 */
+    @Column(name = "GOODS_TYPE", length = 1)
+    private String goodsType;
 
     public Long getGoodsId() {
         return goodsId;
@@ -72,5 +76,13 @@ public class ConsumptionGoods {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }
