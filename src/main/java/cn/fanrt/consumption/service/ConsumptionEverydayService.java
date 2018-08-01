@@ -1,7 +1,9 @@
 package cn.fanrt.consumption.service;
 
+import cn.fanrt.consumption.bean.ConsumptionEverydayEditInfo;
 import cn.fanrt.consumption.domain.ConsumptionEveryday;
 import cn.fanrt.consumption.repository.ConsumptionEverydayRepository;
+import cn.fanrt.utils.JsonObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,5 +33,10 @@ public class ConsumptionEverydayService {
 
     public List<ConsumptionEveryday> findConsumptionEverydayList(Integer page, Integer size) {
         return this.consumptionEverydayRepository.findAll();
+    }
+
+    public JsonObj saveConsumptionEveryday(ConsumptionEverydayEditInfo editInfo) {
+
+        return new JsonObj("0", "保存成功");
     }
 }

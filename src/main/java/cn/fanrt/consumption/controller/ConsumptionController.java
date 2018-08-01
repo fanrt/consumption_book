@@ -1,8 +1,13 @@
 package cn.fanrt.consumption.controller;
 
+import cn.fanrt.consumption.bean.ConsumptionEverydayEditInfo;
 import cn.fanrt.consumption.domain.ConsumptionEveryday;
+import cn.fanrt.consumption.domain.ConsumptionGoods;
 import cn.fanrt.consumption.repository.ConsumptionEverydayRepository;
+import cn.fanrt.consumption.repository.ConsumptionGoodsRepository;
 import cn.fanrt.consumption.service.ConsumptionEverydayService;
+import cn.fanrt.utils.JsonObj;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +30,12 @@ public class ConsumptionController {
 
     @Autowired
     private ConsumptionEverydayService consumptionEverydayService;
+
+    @Autowired
+    private ConsumptionGoodsRepository consumptionGoodsRepository;
+
+    @Autowired
+    private ConsumptionEverydayRepository consumptionEverydayRepository;
 
     /**
      * 进入每日消费列表页面
@@ -57,11 +68,24 @@ public class ConsumptionController {
      * @return String
      */
     @RequestMapping("/consumptionEdit.do")
-    public String controlModelEdit(Long controlModelId, Model model) {
-        if (controlModelId != null) {
-//            ControlModel controlModel = this.controlModelService.selectAObject(ControlModel.class, controlModelId);
-//            model.addAttribute("controlModel", controlModel);
+    public String controlModelEdit(Long consumptionId, Model model) {
+        if (consumptionId != null) {
+            ConsumptionEveryday consumptionEveryday = this.consumptionEverydayRepository.findById(consumptionId).get();
+            List<ConsumptionGoods> consumptionGoodsList = this.consumptionGoodsRepository.findByConsumptionId(consumptionId);
+            model.addAttribute("consumptionEveryday", consumptionEveryday);
+            model.addAttribute("consumptionGoodsList", JSON.toJSONString(consumptionGoodsList));
         }
         return "consumption/consumptionEdit";
+    }
+
+    /**
+     * 保存每日消费
+     * @return
+     */
+    @RequestMapping("/consumptionSave.jo")
+    @ResponseBody
+    public JsonObj controleModelSave(ConsumptionEverydayEditInfo info) {
+        JsonObj jsonObj = this.consumptionEverydayService.saveConsumptionEveryday(info);
+        return jsonObj;
     }
 }
