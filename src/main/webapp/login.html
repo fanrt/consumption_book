@@ -7,8 +7,8 @@
     <script src="resource/js/jquery/jquery.min.js"></script>
     <script type="text/javascript">
         function doSubmit() {
-            window.location.href = "../common/main.do";
-            return;
+            // window.location.href = "../common/main.do";
+            // return;
 
             var form = document.loginForm;
             if (form['imgbtn']) {
@@ -60,9 +60,9 @@
     <div class="container">
         <h1>Welcome</h1>
 
-        <form class="form" name="loginForm" method="post" action="common/main.do">
-            <input type="text" placeholder="Username" maxlength="20">
-            <input type="password" placeholder="Password" maxlength="20">
+        <form class="form" name="loginForm" method="post" action="login">
+            <input type="text" placeholder="Username" name="username" maxlength="20">
+            <input type="password" placeholder="Password" name="password" maxlength="20">
             <button type="submit" id="login-button">登 录</button>
         </form>
     </div>

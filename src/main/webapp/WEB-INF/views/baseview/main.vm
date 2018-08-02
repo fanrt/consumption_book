@@ -21,7 +21,7 @@
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <a class="dropdown-toggle right-sidebar-toggle exit" data-toggle="dropdown" href="javascript:void (0)">
+                    <a href="../logout">
                         <i class="fa fa-user-md"></i> 系统管理
                     </a>
                 </li>
@@ -43,7 +43,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="profile.html" class="J_menuItem">
+                            <a href="../logout" class="J_menuItem">
                                 <div>安全退出</div>
                             </a>
                         </li>

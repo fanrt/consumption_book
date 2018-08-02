@@ -17,7 +17,7 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
     color: white;
     font-weight: 300;
-    background: url(images/bg.jpg) repeat-x #f2f2f2;
+    /*background: url(images/bg.jpg) repeat-x #f2f2f2;*/
 }
 
 body ::-webkit-input-placeholder {
@@ -84,8 +84,8 @@ body :-ms-input-placeholder {
     font-size: 40px;
     -webkit-transition-duration: 1s;
     transition-duration: 1s;
-    -webkit-transition-timing-function: ease-in-put;
-    transition-timing-function: ease-in-put;
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
     font-weight: 200;
 }
 

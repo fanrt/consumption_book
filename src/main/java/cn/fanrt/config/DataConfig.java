@@ -12,6 +12,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -26,8 +27,11 @@ public class DataConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
         dataSource.setUrl("jdbc:oracle:thin:@fanrt.cn:1521:ORCL");
-        dataSource.setUsername("consumption_book");
+        dataSource.setUsername("PUBLIC_SYS");
         dataSource.setPassword("fanrt123456");
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
+        dataSource.setConnectionProperties(properties);
         return dataSource;
     }
 
@@ -42,6 +46,9 @@ public class DataConfig {
         factory.setPackagesToScan("cn.fanrt");
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        factory.setJpaProperties(properties);
         return factory.getObject();
     }
 
